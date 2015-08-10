@@ -317,4 +317,27 @@ class GoogleGeocodeClient extends atoum
                         ->once()
             );
     }
+
+    public function test_timestamp_parameter_make_using_timezone_endpoint()
+    {
+        $this
+            ->given(
+                $response = $this->messageFactory->createResponse(
+                    200,
+                    \Ivory\HttpAdapter\Message\RequestInterface::PROTOCOL_VERSION_1_1,
+                    ['Content-Type: application/json'],
+                    '{"results" : [{"hello" : "world"}], "status" : "OK"}'
+                ),
+                $this->calling($this->mockAdapter)->get = $response,
+                $SUT = new SUT($this->mockAdapter, $this->apiKey),
+                $time = time()
+            )
+            ->when($result = $SUT->executeQuery(['timestamp' => $time]))
+            ->then
+                ->mock($this->mockAdapter)
+                    ->call('get')
+                        ->withArguments(sprintf('https://maps.googleapis.com/maps/api/timezone/json?timestamp=%s', $time))
+                        ->once()
+        ;
+    }
 }
