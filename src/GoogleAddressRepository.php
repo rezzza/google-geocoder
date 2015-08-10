@@ -5,22 +5,26 @@ namespace Rezzza\GoogleGeocoder;
 /**
  * @author Sébastien HOUZÉ <sebastien.houze@verylastroom.com>
  */
-class GoogleGeocodeRepository implements GoogleGeocodeRepositoryInterface
+class GoogleAddressRepository implements GoogleAddressRepositoryInterface
 {
     /**
      * @var GoogleGeocodeClient
      */
     private $client;
 
-    public function __construct(GoogleGeocodeClient $client)
+    /** @var Model\AddressFactory */
+    private $addressFactory;
+
+    public function __construct(GoogleGeocodeClient $client, Model\AddressFactory $addressFactory)
     {
         $this->client = $client;
+        $this->addressFactory = $addressFactory;
     }
 
     public function findByPlaceIdWithLanguage($placeId, $language)
     {
         // placeId should return only one result
-        $results = $this->client->executeQuery([
+        $results = $this->findAddressesBy([
             'placeid' => $placeId,
             'language' => $language
         ]);
@@ -34,7 +38,7 @@ class GoogleGeocodeRepository implements GoogleGeocodeRepositoryInterface
 
     public function findByCoordinatesWithLanguage($latitude, $longitude, $language)
     {
-        return $this->client->executeQuery([
+        return $this->findAddressesBy([
             'latlng' => sprintf('%s,%s', $latitude, $longitude),
             'language' => $language
         ]);
@@ -42,7 +46,7 @@ class GoogleGeocodeRepository implements GoogleGeocodeRepositoryInterface
 
     public function findByAddressWithLanguage($address, $language)
     {
-        return $this->client->executeQuery([
+        return $this->findAddressesBy([
             'address' => $address,
             'language' => $language
         ]);
@@ -55,7 +59,7 @@ class GoogleGeocodeRepository implements GoogleGeocodeRepositoryInterface
             sprintf('locality:%s', $locality)
         ]);
 
-        return $this->client->executeQuery([
+        return $this->findAddressesBy([
             'components' => $components,
             'language' => $language
         ]);
@@ -69,9 +73,18 @@ class GoogleGeocodeRepository implements GoogleGeocodeRepositoryInterface
             sprintf('administrative_area:%s', $administrativeArea)
         ]);
 
-        return $this->client->executeQuery([
+        return $this->findAddressesBy([
             'components' => $components,
             'language' => $language
         ]);
+    }
+
+    private function findAddressesBy(array $queryParams)
+    {
+        $json = $this->client->executeQuery($queryParams);
+
+        return $this->addressFactory->createFromDecodedResultCollection(
+            array_key_exists('results', $json) ? $json['results'] : [$json['result']]
+        );
     }
 }

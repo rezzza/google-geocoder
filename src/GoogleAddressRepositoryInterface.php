@@ -2,7 +2,7 @@
 
 namespace Rezzza\GoogleGeocoder;
 
-interface GoogleGeocodeRepositoryInterface
+interface GoogleAddressRepositoryInterface
 {
     /**
      * @param string $placeId

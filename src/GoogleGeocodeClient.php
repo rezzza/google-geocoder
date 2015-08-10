@@ -49,18 +49,14 @@ class GoogleGeocodeClient
                 );
             }
 
-            if (!array_key_exists('status', $json) || 'OK' !== $json['status']) {
+            if (!array_key_exists('status', $json) || self::STATUS_OK !== $json['status']) {
                 throw Exception\GoogleGeocodeException::fromStatusAndErrorMessage(
                     $json['status'],
                     array_key_exists('error_message', $json) ? $json['error_message'] : null
                 );
             }
 
-            $factory = new Model\AddressFactory();
-
-            return $factory->createFromDecodedResultCollection(
-                array_key_exists('results', $json) ? $json['results'] : [$json['result']]
-            );
+            return $json;
         } catch (HttpAdapterException $e) {
             throw new Exception\GoogleGeocodeProtocolException($e->getMessage(), $e->getCode(), $e);
         }
