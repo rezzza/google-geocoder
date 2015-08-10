@@ -7,7 +7,7 @@ use Rezzza\GoogleGeocoder\Exception\GoogleGeocodeInvalidResultException;
 /**
  * @author Sébastien HOUZÉ <sebastien.houze@verylastroom.com>
  */
-final class AddressFactory
+class AddressFactory
 {
     public function createFromDecodedResultCollection(array $results)
     {
