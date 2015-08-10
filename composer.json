@@ -1,0 +1,35 @@
+{
+    "name": "rezzza/google-geocoder",
+    "type": "library",
+    "description": "Easy wrap Google geocoder web service",
+    "keywords": ["geocoder", "google"],
+    "license": "MIT",
+    "homepage": "https://github.com/rezzza/google-geocoder",
+    "authors": [{
+        "name": "Contributor Guys",
+        "homepage": "https://github.com/rezzza/google-geocoder/contributors"
+    }],
+    "require": {
+        "php": ">=5.4.0",
+
+        "egeloen/http-adapter": "~0.7.1",
+        "jakeasmith/http_build_url": "^1.0"
+    },
+    "require-dev": {
+        "atoum/atoum": "~1.0",
+        "atoum/stubs": "~2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rezzza\\GoogleGeocoder\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
