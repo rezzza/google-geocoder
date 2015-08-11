@@ -9,6 +9,7 @@
         "name": "Contributor Guys",
         "homepage": "https://github.com/rezzza/google-geocoder/contributors"
     }],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.6.0",
 
