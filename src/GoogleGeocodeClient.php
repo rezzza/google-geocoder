@@ -22,10 +22,18 @@ class GoogleGeocodeClient
 
     private $adapter;
 
-    public function __construct(HttpAdapterInterface $adapter, $apiKey = null)
+    /**
+     * Will override all endpoint in order to make easier tests
+     *
+     * @var string
+     */
+    private $testEndpoint;
+
+    public function __construct(HttpAdapterInterface $adapter, $apiKey = null, $testEndpoint = null)
     {
         $this->adapter = $adapter;
         $this->apiKey = $apiKey;
+        $this->testEndpoint = $testEndpoint;
     }
 
     public function executeQuery(array $queryParams)
@@ -84,6 +92,10 @@ class GoogleGeocodeClient
 
     private function guessEndpointUrl($queryParams)
     {
+        if (null !== $this->testEndpoint) {
+            return $this->testEndpoint;
+        }
+
         // Because google provide much more translated info
         // on placeDetails endpoint we switch to
         // Google place details compatible payload for
