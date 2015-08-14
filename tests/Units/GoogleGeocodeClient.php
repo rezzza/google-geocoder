@@ -340,4 +340,38 @@ class GoogleGeocodeClient extends atoum
                         ->once()
         ;
     }
+
+    /**
+     * @dataProvider overridedEndpoints
+     */
+    public function test_we_can_override_all_endpoints_by_setting_test_endpoint($queryParams, $expectedUrl)
+    {
+        $this
+            ->given(
+                $response = $this->messageFactory->createResponse(
+                    200,
+                    \Ivory\HttpAdapter\Message\RequestInterface::PROTOCOL_VERSION_1_1,
+                    ['Content-Type: application/json'],
+                    '{"results" : [{"hello" : "world"}], "status" : "OK"}'
+                ),
+                $this->calling($this->mockAdapter)->get = $response,
+                $SUT = new SUT($this->mockAdapter, $this->apiKey, 'http://test.endpoint.com')
+            )
+            ->when($result = $SUT->executeQuery($queryParams))
+            ->then
+                ->mock($this->mockAdapter)
+                    ->call('get')
+                        ->withArguments($expectedUrl)
+                        ->once()
+        ;
+    }
+
+    public function overridedEndpoints()
+    {
+        return [
+            [['placeid' => '9559859'], 'http://test.endpoint.com/?placeid=9559859'],
+            [['timestamp' => '9559859'], 'http://test.endpoint.com/?timestamp=9559859'],
+            [['place_id' => '9559859'], 'http://test.endpoint.com/?place_id=9559859']
+        ];
+    }
 }
