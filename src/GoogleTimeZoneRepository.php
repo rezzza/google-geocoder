@@ -2,7 +2,7 @@
 
 namespace Rezzza\GoogleGeocoder;
 
-class GoogleTimeZoneRepository
+class GoogleTimeZoneRepository implements GoogleTimeZoneRepositoryInterface
 {
     private $geocodeClient;
 
