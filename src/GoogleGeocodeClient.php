@@ -15,6 +15,7 @@ class GoogleGeocodeClient
 {
     const ENDPOINT_URL_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json';
     const ENDPOINT_URL_PLACE_DETAILS = 'https://maps.googleapis.com/maps/api/place/details/json';
+    const ENDPOINT_URL_TIMEZONE = 'https://maps.googleapis.com/maps/api/timezone/json';
     const STATUS_OK = 'OK';
 
     private $apiKey;
@@ -89,6 +90,10 @@ class GoogleGeocodeClient
         // search by place id
         if (array_key_exists('placeid', $queryParams)) {
             return self::ENDPOINT_URL_PLACE_DETAILS;
+        }
+
+        if (array_key_exists('timestamp', $queryParams)) {
+            return self::ENDPOINT_URL_TIMEZONE;
         }
 
         return self::ENDPOINT_URL_GEOCODE;
