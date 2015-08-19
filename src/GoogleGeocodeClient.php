@@ -53,6 +53,12 @@ class GoogleGeocodeClient
             }
 
             $content = (string) $response->getBody();
+            if (empty($content)) {
+                throw new Exception\GoogleGeocodeResponseDecodeException(
+                    'Response is empty, expecting valid json.'
+                );
+            }
+
             $json = json_decode($content, true);
 
             if (null === $json) {

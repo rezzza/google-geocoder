@@ -94,7 +94,34 @@ class GoogleGeocodeClient extends atoum
             );
     }
 
-    public function test_it_throws_response_decode_exception()
+    public function test_it_throws_response_decode_exception_on_empty_content()
+    {
+        $this
+            ->given(
+                $response = $this->messageFactory->createResponse(
+                    200,
+                    \Ivory\HttpAdapter\Message\RequestInterface::PROTOCOL_VERSION_1_1,
+                    ['Content-Type: application/json'],
+                    ''
+                ),
+                $this->calling($this->mockAdapter)->get = $response,
+                $SUT = new SUT($this->mockAdapter, $this->apiKey)
+            )
+            ->then(
+                $this->exception(function() use($SUT) {
+                    $SUT->executeQuery([]);
+                })
+                ->isInstanceOf('Rezzza\GoogleGeocoder\Exception\GoogleGeocodeResponseDecodeException')
+                ->hasMessage('Response is empty, expecting valid json.')
+            )
+            ->and(
+                $this->mock($this->mockAdapter)
+                    ->call('get')
+                        ->once()
+            );
+    }
+
+    public function test_it_throws_response_decode_exception_on_invalid_json()
     {
         $this
             ->given(
