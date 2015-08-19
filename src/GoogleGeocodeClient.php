@@ -40,7 +40,10 @@ class GoogleGeocodeClient
     {
         $url = $this->buildUrl($queryParams);
         try {
-            $response = $this->adapter->get($url);
+            $response = $this->adapter->get(
+                $url, 
+                ['Connection' => 'keep-alive'] // Without, curl returns SSLRead() return error -9806
+            );
 
             if ($response->getStatusCode() >= 400) {
                 throw new Exception\GoogleGeocodeProtocolException(
