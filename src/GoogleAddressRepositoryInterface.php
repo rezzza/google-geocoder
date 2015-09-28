@@ -20,6 +20,13 @@ interface GoogleAddressRepositoryInterface
     public function findByCoordinatesWithLanguage($latitude, $longitude, $language);
 
     /**
+     * @param double $latitude
+     * @param double $longitude
+     * @param string $language
+     */
+    public function findLocalityByCoordinatesWithLanguage($latitude, $longitude, $language);
+
+    /**
      * @param string $address
      * @param string $language
      *
