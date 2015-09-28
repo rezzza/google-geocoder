@@ -92,6 +92,12 @@ class GoogleAddressRepository extends atoum
                 'findByLocalityAndCountryCodeAndAministrativeAreaWithLanguage',
                 ['Paris', 'FR', 'Île de France', 'fr'],
                 ['components' => 'country:FR|locality:Paris|administrative_area:Île de France', 'language' => 'fr']
+            ],
+            // findLocalityByCoordinatesWithLanguage
+            [
+                'findLocalityByCoordinatesWithLanguage',
+                [51.789464747, 3.354421901, 'fr'],
+                ['latlng' => '51.789464747,3.354421901', 'result_type' => 'locality', 'language' => 'fr']
             ]
         ];
     }
@@ -188,6 +194,31 @@ class GoogleAddressRepository extends atoum
         ;
     }
 
+    public function test_locality_by_coordinates_returns_locality_result()
+    {
+        $this
+            ->given(
+                $this->givenGoogleReturns('{
+                    "results" : [],
+                    "status" : "OK"
+                }'),
+                $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
+                $expectedResult = new \Rezzza\GoogleGeocoder\Model\AddressCollection([
+                    new \Rezzza\GoogleGeocoder\Model\Address('CH7uJiKLOpKHgFfv', 'political'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', 'locality'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', 'point-of-intereset')
+                ]),
+                $this->calling($addressFactory)->createFromDecodedResultCollection = $expectedResult,
+                $sut = new SUT($this->mockClient, $addressFactory)
+            )
+            ->when(
+                $result = $sut->findLocalityByCoordinatesWithLanguage(51.67849494, 3.848474747, 'fr')
+            )
+            ->then
+                ->object($result)->isInstanceOf('Rezzza\GoogleGeocoder\Model\Address')
+                ->variable($result->getPlaceId())->isEqualTo('KSDK898hjhYUY787')
+        ;
+    }
 
     private function givenGoogleReturns($payload)
     {

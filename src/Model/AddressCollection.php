@@ -51,6 +51,14 @@ final class AddressCollection implements \IteratorAggregate, \Countable
     }
 
     /**
+     * @return Address
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    /**
      * @return Address[]
      */
     public function slice($offset, $length = null)
