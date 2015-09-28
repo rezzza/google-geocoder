@@ -47,11 +47,15 @@ class AddressFactory
                 case 'place_id':
                     $placeId = $section;
                 break;
+                case 'types':
+                    $type = $section[0];
+                break;
             }
         }
 
         return new Address(
             $placeId,
+            $type,
             $streetNumber,
             $route,
             $postalCode,

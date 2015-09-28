@@ -174,8 +174,8 @@ class GoogleAddressRepository extends atoum
                 }'),
                 $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
                 $expectedResult = new \Rezzza\GoogleGeocoder\Model\AddressCollection([
-                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987'),
-                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787')
+                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', 'locality'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', 'locality')
                 ]),
                 $this->calling($addressFactory)->createFromDecodedResultCollection = $expectedResult,
                 $sut = new SUT($this->mockClient, $addressFactory)

@@ -170,6 +170,8 @@ class AddressFactory extends atoum
                             ->and
                                 ->float($northEast->getLongitude())
                                 ->isIdenticalTo(2.4699208)
+                ->and($type = $address->getType())
+                    ->variable($type)->isEqualTo('locality')
         ;
     }
 }
