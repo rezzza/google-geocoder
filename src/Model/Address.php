@@ -13,6 +13,11 @@ final class Address
     private $placeId;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * @var string|int
      */
     private $streetNumber;
@@ -61,6 +66,7 @@ final class Address
      */
     public function __construct(
         $placeId,
+        $type,
         $streetNumber = null,
         $route = null,
         $postalCode = null,
@@ -72,6 +78,7 @@ final class Address
     )
     {
         $this->placeId = $placeId;
+        $this->type = $type;
         $this->streetNumber = $streetNumber;
         $this->route = $route;
         $this->postalCode = $postalCode;
@@ -88,6 +95,14 @@ final class Address
     public function getPlaceId()
     {
         return $this->placeId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
