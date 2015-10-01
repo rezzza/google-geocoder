@@ -22,6 +22,9 @@ class GoogleGeocodeException extends \Exception
             case 'INVALID_REQUEST':
                 $message = $message ?: 'Invalid request.';
                 return new GoogleGeocodeInvalidRequestException($message);
+            case 'NOT_FOUND':
+                $message = $message ?: 'Not found.';
+                return new GoogleGeocodeNotFoundException($message);
             case 'UNKNOWN_ERROR':
             default:
                 $message = $message ?: 'Unknown error.';

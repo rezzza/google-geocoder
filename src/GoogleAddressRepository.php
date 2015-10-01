@@ -23,17 +23,25 @@ class GoogleAddressRepository implements GoogleAddressRepositoryInterface
 
     public function findByPlaceIdWithLanguage($placeId, $language)
     {
-        // placeId should return only one result
-        $results = $this->findAddressesBy([
-            'placeid' => $placeId,
-            'language' => $language
-        ]);
+        try {
+            // placeId should return only one result
+            $results = $this->findAddressesBy([
+                'placeid' => $placeId,
+                'language' => $language
+            ]);
 
-        if (count($results) <= 0) {
+            if (count($results) <= 0) {
+                return null;
+            }
+
+            return $results->first();
+        } catch (Exception\GoogleGeocodeInvalidRequestException $e) {
+            // PlaceDetails could return InvalidRequest status when typo the placeId
+            return null;
+        } catch (Exception\GoogleGeocodeNotFoundException $e) {
+            // PlaceDetails could also return NotFound status. Example : ChIJRTLr-GYuEmsRafy61i59si0
             return null;
         }
-
-        return $results->first();
     }
 
     public function findByCoordinatesWithLanguage($latitude, $longitude, $language)
