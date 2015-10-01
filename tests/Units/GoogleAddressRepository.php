@@ -202,6 +202,22 @@ class GoogleAddressRepository extends atoum
         ;
     }
 
+    public function test_by_place_id_return_null_if_no_result_from_google()
+    {
+        $this
+            ->given(
+                $this->givenGoogleClientThrows(new \Rezzza\GoogleGeocoder\Exception\GoogleGeocodeNoResultException),
+                $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
+                $sut = new SUT($this->mockClient, $addressFactory)
+            )
+            ->when(
+                $result = $sut->findByPlaceIdWithLanguage('ChJUi89olKI06', 'fr')
+            )
+            ->then
+                ->variable($result)->isNull()
+        ;
+    }
+
     public function test_by_place_id_return_one_result_only()
     {
         $this
