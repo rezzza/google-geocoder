@@ -41,6 +41,8 @@ class GoogleAddressRepository implements GoogleAddressRepositoryInterface
         } catch (Exception\GoogleGeocodeNotFoundException $e) {
             // PlaceDetails could also return NotFound status. Example : ChIJRTLr-GYuEmsRafy61i59si0
             return null;
+        } catch (Exception\GoogleGeocodeNoResultException $e) {
+            return null;
         }
     }
 
