@@ -170,6 +170,38 @@ class GoogleAddressRepository extends atoum
         ;
     }
 
+    public function test_by_place_id_return_null_if_invalid_request_from_google()
+    {
+        $this
+            ->given(
+                $this->givenGoogleClientThrows(new \Rezzza\GoogleGeocoder\Exception\GoogleGeocodeInvalidRequestException),
+                $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
+                $sut = new SUT($this->mockClient, $addressFactory)
+            )
+            ->when(
+                $result = $sut->findByPlaceIdWithLanguage('LJLJ898', 'fr')
+            )
+            ->then
+                ->variable($result)->isNull()
+        ;
+    }
+
+    public function test_by_place_id_return_null_if_not_found_from_google()
+    {
+        $this
+            ->given(
+                $this->givenGoogleClientThrows(new \Rezzza\GoogleGeocoder\Exception\GoogleGeocodeNotFoundException),
+                $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
+                $sut = new SUT($this->mockClient, $addressFactory)
+            )
+            ->when(
+                $result = $sut->findByPlaceIdWithLanguage('ChJUi89olKI06', 'fr')
+            )
+            ->then
+                ->variable($result)->isNull()
+        ;
+    }
+
     public function test_by_place_id_return_one_result_only()
     {
         $this
@@ -230,5 +262,10 @@ class GoogleAddressRepository extends atoum
             $payload
         );
         $this->calling($this->mockAdapter)->get = $response;
+    }
+
+    private function givenGoogleClientThrows(\Rezzza\GoogleGeocoder\Exception\GoogleGeocodeException $exception)
+    {
+        $this->calling($this->mockClient)->executeQuery->throw = $exception;
     }
 }

@@ -318,6 +318,33 @@ class GoogleGeocodeClient extends atoum
             );
     }
 
+    public function test_it_throws_not_found_exception()
+    {
+        $this
+            ->given(
+                $response = $this->messageFactory->createResponse(
+                    200,
+                    \Ivory\HttpAdapter\Message\RequestInterface::PROTOCOL_VERSION_1_1,
+                    ['Content-Type: application/json'],
+                    '{"results" : [], "status" : "NOT_FOUND"}'
+                ),
+                $this->calling($this->mockAdapter)->get = $response,
+                $SUT = new SUT($this->mockAdapter, $this->apiKey)
+            )
+            ->then(
+                $this->exception(function() use($SUT) {
+                    $SUT->executeQuery([]);
+                })
+                ->isInstanceOf('Rezzza\GoogleGeocoder\Exception\GoogleGeocodeNotFoundException')
+                ->hasMessage('Not found.')
+            )
+            ->and(
+                $this->mock($this->mockAdapter)
+                    ->call('get')
+                        ->once()
+            );
+    }
+
     public function test_it_throws_unknown_exception()
     {
         $this
