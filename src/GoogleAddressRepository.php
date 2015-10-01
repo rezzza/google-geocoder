@@ -54,27 +54,31 @@ class GoogleAddressRepository implements GoogleAddressRepositoryInterface
 
     public function findLocalityByCoordinatesWithLanguage($latitude, $longitude, $language)
     {
-        $results = $this->findAddressesBy([
-            'latlng' => sprintf('%s,%s', $latitude, $longitude),
-            'result_type' => 'locality',
-            'language' => $language
-        ]);
+        try {
+            $results = $this->findAddressesBy([
+                'latlng' => sprintf('%s,%s', $latitude, $longitude),
+                'result_type' => 'locality',
+                'language' => $language
+            ]);
 
-        if (count($results) <= 0) {
+            if (count($results) <= 0) {
+                return null;
+            }
+
+            return array_reduce(
+                $results->getAddresses(),
+                function ($carry, $item) {
+                    if ($item->getType() === 'locality') {
+                        return $item;
+                    }
+
+                    return $carry;
+                },
+                null
+            );
+        } catch (Exception\GoogleGeocodeNoResultException $e) {
             return null;
         }
-
-        return array_reduce(
-            $results->getAddresses(),
-            function ($carry, $item) {
-                if ($item->getType() === 'locality') {
-                    return $item;
-                }
-
-                return $carry;
-            },
-            null
-        );
     }
 
     public function findByAddressWithLanguage($address, $language)

@@ -252,6 +252,22 @@ class GoogleAddressRepository extends atoum
         ;
     }
 
+    public function test_locality_by_coordinates_returns_null_if_google_no_result()
+    {
+        $this
+            ->given(
+                $this->givenGoogleClientThrows(new \Rezzza\GoogleGeocoder\Exception\GoogleGeocodeNoResultException),
+                $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
+                $sut = new SUT($this->mockClient, $addressFactory)
+            )
+            ->when(
+                $result = $sut->findLocalityByCoordinatesWithLanguage(51.67849494, 3.848474747, 'fr')
+            )
+            ->then
+                ->variable($result)->isNull()
+        ;
+    }
+
     private function givenGoogleReturns($payload)
     {
         $messageFactory = new \Ivory\HttpAdapter\Message\MessageFactory();
