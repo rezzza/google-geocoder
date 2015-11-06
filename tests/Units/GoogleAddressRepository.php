@@ -228,8 +228,8 @@ class GoogleAddressRepository extends atoum
                 }'),
                 $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
                 $expectedResult = new \Rezzza\GoogleGeocoder\Model\AddressCollection([
-                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', 'locality'),
-                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', 'locality')
+                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', ['locality'], 'Paris'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', ['locality'], 'Marseille')
                 ]),
                 $this->calling($addressFactory)->createFromDecodedResultCollection = $expectedResult,
                 $sut = new SUT($this->mockClient, $addressFactory)
@@ -252,9 +252,9 @@ class GoogleAddressRepository extends atoum
                 }'),
                 $addressFactory = new \mock\Rezzza\GoogleGeocoder\Model\AddressFactory,
                 $expectedResult = new \Rezzza\GoogleGeocoder\Model\AddressCollection([
-                    new \Rezzza\GoogleGeocoder\Model\Address('CH7uJiKLOpKHgFfv', 'political'),
-                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', 'locality'),
-                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', 'point-of-intereset')
+                    new \Rezzza\GoogleGeocoder\Model\Address('CH7uJiKLOpKHgFfv', ['political'], 'Paris'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('KSDK898hjhYUY787', ['locality'], 'Marseille'),
+                    new \Rezzza\GoogleGeocoder\Model\Address('LKDJFLSDK87987', ['point-of-intereset'], 'Tour Eiffel')
                 ]),
                 $this->calling($addressFactory)->createFromDecodedResultCollection = $expectedResult,
                 $sut = new SUT($this->mockClient, $addressFactory)

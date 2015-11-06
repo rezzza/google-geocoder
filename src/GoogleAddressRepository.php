@@ -70,7 +70,8 @@ class GoogleAddressRepository implements GoogleAddressRepositoryInterface
             return array_reduce(
                 $results->getAddresses(),
                 function ($carry, $item) {
-                    if ($item->getType() === 'locality') {
+                    $types = $item->getTypes();
+                    if ($types[0] === 'locality') {
                         return $item;
                     }
 

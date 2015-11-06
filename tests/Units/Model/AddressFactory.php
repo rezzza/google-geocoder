@@ -38,6 +38,7 @@ class AddressFactory extends atoum
                                 }
                             ],
                             "formatted_address" : "Paris, France",
+                            "name": "Paris",
                             "geometry" : {
                                 "bounds" : {
                                     "northeast" : {
@@ -170,8 +171,12 @@ class AddressFactory extends atoum
                             ->and
                                 ->float($northEast->getLongitude())
                                 ->isIdenticalTo(2.4699208)
-                ->and($type = $address->getType())
-                    ->variable($type)->isEqualTo('locality')
+                ->and($type = $address->getTypes())
+                    ->phpArray($type)->containsValues(['locality', 'political'])
+                ->and($name = $address->getName())
+                    ->variable($name)->isEqualTo('Paris')
+                ->and($formattedAddress = $address->getFormattedAddress())
+                    ->variable($formattedAddress)->isEqualTo('Paris, France')
         ;
     }
 }
